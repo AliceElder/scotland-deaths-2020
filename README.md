@@ -1,12 +1,12 @@
-Motivation
-In 2020 COVID-19 took hold of the world. This project looks at the death statistics throughout 2020 to find the impact.
+#Motivation
+In 2020 COVID-19 took hold of the world. This project looks at the Scottish death statistics throughout 2020 to find the impact.
 
-File Descriptions
-Data is taken from the Scottish NHS website. Up-to-date info can be found here:
+#File Descriptions
+Data is taken from the Scottish NHS website. 
 The data in this project spans 01/01/2020 to 25/07/2020
 
-Authors
+#Authors
 This project was created by Alice Elder.
 
-Acknowledgements
+#Acknowledgements
 Thanks to NHS Scotland for providing the data for this project.
