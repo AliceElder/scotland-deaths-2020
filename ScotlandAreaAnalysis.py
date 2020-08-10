@@ -55,6 +55,7 @@ plt.tight_layout()
 ax.figure.savefig(cases_by_area_png)
 #plt.show()
 
+#Add labels to show Glasgow and Highlands
 for line in df_combined_pd.index:
     if (df_combined_pd.CouncilArea[line] == 'Glasgow City' or df_combined_pd.CouncilArea[line] == 'Highland'):
         ax.text(df_combined_pd.CumulativePositive[line], df_combined_pd.PopDensity[line], df_combined_pd.CouncilArea[line], ha='right', va='center', size='small', color='black')
