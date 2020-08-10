@@ -14,19 +14,32 @@ land_area_ca = '.\\Data\\land_area_ca_2014.csv'
 cases_by_area_png = '.\\Graphs\\cases-by-area.png'
 cases_by_area_labelled_png = '.\\Graphs\\cases-by-area-labelled.png'
 
+#Function to load data
+def load_data(csv_path, columns, skiprows, nrows):
+    '''
+    Parameters:
+    csv_path: the csv containing the data
+    columns: the columns to be included
+    skiprows: line numbers to skip (0-indexed) or number of lines to skip (int) at the start of the file.
+    nrows: number of rows of file to read
+
+    Returns:
+    df: a dataframe containing the loaded data
+    '''
+
+    df = pd.read_csv(csv_path, skiprows=skiprows, nrows=nrows, thousands=',')
+    df = df[columns]
+    df.dropna(how="all", inplace=True)
+    return df
+
 #Load data into dataframes
-df_cases = pd.read_csv(cases_ca)
-df_cases = df_cases[['CA','CumulativePositive','CumulativeDeaths']]
+df_cases = load_data(cases_ca, ['CA','CumulativePositive','CumulativeDeaths'], None, None)
 df_cases_pivot = df_cases.groupby(['CA']).max()
 
-df_popdensity = pd.read_csv(pop_density_ca, skiprows = 2, nrows=35, thousands=',')
-df_popdensity.dropna(how="all", inplace=True)
-df_popdensity = df_popdensity[['Code','Persons','2019']]
+df_popdensity = load_data(pop_density_ca, ['Code','Persons','2019'], skiprows = 2, nrows=35)
 df_popdensity.rename(columns={"Persons": "CouncilArea", "Code": "CA", "2019": "PopDensity"}, inplace=True)
-df_popdensity['PopDensity'] = df_popdensity['PopDensity'].astype(int)
 
-df_landarea = pd.read_csv(land_area_ca)
-df_landarea = df_landarea[['FeatureCode','Value']]
+df_landarea = load_data(land_area_ca, ['FeatureCode','Value'], None, None)
 df_landarea.rename(columns={"FeatureCode": "CA", "Value": "LandArea"}, inplace=True)
 
 #Combine into one dataframe
@@ -49,7 +62,7 @@ ax.figure.savefig(cases_by_area_labelled_png)
 ax.clear()
 plt.close(ax.figure)
 
-#Glasgow v Highlands
+#Drilling down into the records for Glasgow v Highlands
 df_GLA_HIG = df_combined_pd[['CouncilArea','CumulativePositive', 'PopDensity', 'LandArea']]
 df_GLA_HIG = df_GLA_HIG.loc[(df_GLA_HIG['CouncilArea'] == 'Glasgow City') | (df_GLA_HIG['CouncilArea'] == 'Highland')]
 print(df_GLA_HIG)
