@@ -47,23 +47,29 @@ df_combined_pd = pd.merge(df_popdensity, df_cases_pivot, on='CA')
 df_combined_pd = pd.merge(df_combined_pd, df_landarea, on='CA')
 #print(df_combined_pd)
 
-#Plot Graphs
-ax = sns.scatterplot(x='CumulativePositive', y='PopDensity', data=df_combined_pd, size='LandArea', hue='CouncilArea', sizes=(10, 2000), alpha=0.4, legend=False)
-ax.set(ylim=(0, 700000),xlim=(0, 3000),xlabel='Number of Cases', ylabel='Population Density')
+#Plot a scatter diagram
+ax1 = sns.scatterplot(x='CumulativePositive', y='PopDensity', data=df_combined_pd, legend=False)#, hue='CouncilArea', alpha=0.6
+ax1.set(ylim=(0, 700000),xlim=(0, 3000),xlabel='Number of Cases', ylabel='Population Density')
 plt.title('Number of Cases by Council Area')
 plt.tight_layout()
-ax.figure.savefig(cases_by_area_png)
+ax1.figure.savefig(cases_by_area_png)
+ax1.clear()
+plt.close(ax1.figure)
 #plt.show()
 
-#Add labels to show Glasgow and Highlands
+#Plot a bubble diagram, with labels to show Glasgow and Highlands
+ax2 = sns.scatterplot(x='CumulativePositive', y='PopDensity', data=df_combined_pd, size='LandArea', hue='CouncilArea', sizes=(10, 2000), alpha=0.4, legend=False)
+ax2.set(ylim=(0, 700000),xlim=(0, 3000),xlabel='Number of Cases', ylabel='Population Density')
+plt.title('Number of Cases by Council Area')
+plt.tight_layout()
 for line in df_combined_pd.index:
     if (df_combined_pd.CouncilArea[line] == 'Glasgow City' or df_combined_pd.CouncilArea[line] == 'Highland'):
-        ax.text(df_combined_pd.CumulativePositive[line], df_combined_pd.PopDensity[line], df_combined_pd.CouncilArea[line], ha='right', va='center', size='small', color='black')
-ax.figure.savefig(cases_by_area_labelled_png)
-ax.clear()
-plt.close(ax.figure)
+        ax2.text(df_combined_pd.CumulativePositive[line], df_combined_pd.PopDensity[line], df_combined_pd.CouncilArea[line], ha='right', va='center', size='small', color='black')
+ax2.figure.savefig(cases_by_area_labelled_png)
+ax2.clear()
+plt.close(ax2.figure)
 
-#Drilling down into the records for Glasgow v Highlands
+#Drill down into the records for Glasgow v Highlands
 df_GLA_HIG = df_combined_pd[['CouncilArea','CumulativePositive', 'PopDensity', 'LandArea']]
 df_GLA_HIG = df_GLA_HIG.loc[(df_GLA_HIG['CouncilArea'] == 'Glasgow City') | (df_GLA_HIG['CouncilArea'] == 'Highland')]
 print(df_GLA_HIG)
