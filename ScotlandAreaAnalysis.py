@@ -1,7 +1,5 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from datetime import datetime
-import matplotlib.dates as dates
 import numpy as np
 import seaborn as sns
 
@@ -17,6 +15,8 @@ cases_by_area_labelled_png = '.\\Graphs\\cases-by-area-labelled.png'
 #Function to load data
 def load_data(csv_path, columns, skiprows, nrows):
     '''
+    This function loads data from a CSV into a dataframe, and performs some basic cleaning
+
     Parameters:
     csv_path: the csv containing the data
     columns: the columns to be included
@@ -27,9 +27,16 @@ def load_data(csv_path, columns, skiprows, nrows):
     df: a dataframe containing the loaded data
     '''
 
+    #Load CSV
     df = pd.read_csv(csv_path, skiprows=skiprows, nrows=nrows, thousands=',')
+    print(df.columns)
+
+    #Limit df to only the specified columns
     df = df[columns]
+
+    #Remove rows if all of the values are blank i.e. an empty row
     df.dropna(how="all", inplace=True)
+
     return df
 
 #Load data into dataframes
